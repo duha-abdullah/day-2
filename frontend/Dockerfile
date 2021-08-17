@@ -1,6 +1,8 @@
 FROM node:10-alpine
 WORKDIR /usr/src/app
-COPY frontend/package*.json ./
+COPY package*.json ./
+RUN ls -l
 RUN npm install
-COPY frontend ./
+COPY . ./
 EXPOSE 80
+CMD ["npm", "run"]
