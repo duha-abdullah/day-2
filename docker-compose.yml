@@ -5,10 +5,12 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: api-day-2
-    ports:
-      - 8001:3001
     depends_on:
       - db
+    networks:
+      - public-network
+    environment:
+      - CONNECTION_STRING:root:password@localhost:5432
   web:
     build:
       context: ./frontend
@@ -16,19 +18,34 @@ services:
     container_name: web-day-2
     restart: always
     ports:
-      - 8080:80
+      - 80:3000
     depends_on:
       - db
+    networks:
+      - public-network
   db:
     container_name: db-day-2
     image: postgres:11.2-alpine
     volume:
-      - ./volume:var/lib/postgressql
+      - ./volume:var/lib/postgressql/data
     environment:
+      - postgres_ROOT_PASSWORD=password
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgresdb
       - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust 
     ports:
       - 5432:5432 
+    volumes:
+      - dojo_course_postgres:/var/lib/postgres
+      - dojo_course_postgres-config:/etc/postgres
     restart: always
+    networks:
+      - public-network
+ volumes:
+   dojo_course_postgres:
+   dojo_course_postgres-config:
+ networks:
+   public-network:
+     name: public-network
+     driver: bridge 
