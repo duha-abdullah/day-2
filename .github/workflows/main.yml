@@ -48,7 +48,7 @@ jobs:
           context: ./backend/
           file: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/docker-flasksql:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dojo-corsel:latest
 
       # Runs a set of commands using the runners shell
       - name: Image digest
